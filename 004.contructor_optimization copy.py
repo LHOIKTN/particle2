@@ -17,7 +17,7 @@ BLACK = (0, 0, 0)
 
 
 # 이미지 불러오기 and 리사이즈
-def load_and_resize_image(path, screen_width, screen_height):
+def load_and_resize_image(path:str, screen_width:int, screen_height:int):
     try:
         image = pygame.image.load(path).convert() #  이미지 불러오기
         w,h = image.get_size()  # 이미지의 가로 세로 높이 추출
