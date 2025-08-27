@@ -1,60 +1,160 @@
+"""
+🎯 클래스 학습 1단계 - pygame 초기화 및 기본 화면
+📚 학습 목표: pygame 라이브러리 사용법과 기본 화면 설정
+🎮 실습: 화면 크기와 색상을 바꿔보세요!
+
+이번 단계에서 배울 것:
+1. pygame 라이브러리 import와 초기화
+2. 화면 설정 (크기, 제목)
+3. 색상 정의와 사용법
+4. 기본적인 게임 루프 구조
+"""
+
 import pygame
-import math
 import sys
 
-# pygame 초기화
+# ========================================
+# 🎮 1단계: pygame 초기화
+# ========================================
+
+# pygame 라이브러리 초기화 (반드시 필요!)
+# pygame을 사용하기 전에 항상 호출해야 합니다
 pygame.init()
 
-# 화면 설정
-WIDTH = 1200 # 너비
-HEIGHT = 800 # 높이
-screen = pygame.display.set_mode((WIDTH, HEIGHT)) # 표시될 화면(스크린) 지정
-fullscreen = False  # 풀스크린으로 할지 말지
+# ========================================
+# 🖥️ 2단계: 화면 설정
+# ========================================
 
-# 색상 정의 (r,g,b)
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+# 화면 크기 설정 (가로 x 세로)
+WIDTH = 1200   # 화면 가로 크기 (픽셀)
+HEIGHT = 800   # 화면 세로 크기 (픽셀)
 
+# 화면 생성
+# pygame.display.set_mode()는 화면을 생성하는 함수입니다
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# 창 제목 설정
+pygame.display.set_caption("파티클 시스템 - 1단계: 기본 화면")
+
+# ========================================
+# 🎨 3단계: 색상 정의
+# ========================================
+
+# 색상은 (R, G, B) 형태로 정의합니다
+# R: Red (빨강), G: Green (초록), B: Blue (파랑)
+# 각 값은 0~255 사이의 숫자입니다
+
+WHITE = (255, 255, 255)  # 흰색 (모든 색상 최대값)
+BLACK = (0, 0, 0)        # 검은색 (모든 색상 최소값)
+RED = (255, 0, 0)        # 빨간색
+GREEN = (0, 255, 0)      # 초록색
+BLUE = (0, 0, 255)       # 파란색
+YELLOW = (255, 255, 0)   # 노란색 (빨강 + 초록)
+
+# ========================================
+# 🎮 4단계: 메인 게임 루프
+# ========================================
 
 def main():
-
-    global screen, fullscreen, WIDTH, HEIGHT #전역변수로 설정
-    clock = pygame.time.Clock() # Framerate 조절을 위한 시계
-
-
-    running = True # 진행 여부
-    while running:  # 무한루프. 이제 running을 False 로 설정하면 루프 탈출하고 종료
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT: # 나가기 버튼 누르면 
-                running = False  # 루프 종료
-            elif event.type == pygame.KEYDOWN: # 키를 누르면
-                if event.key == pygame.K_ESCAPE: # 누른 키가 ESC 키면
-                    running = False # 루프 종료
-                elif event.key == pygame.K_f: # 누른 키가 f면 
-                    fullscreen = not fullscreen # F키로 전체화면/창모드 전환
-
-                    if fullscreen: # 전체화면인 경우  screen을 다시 설정
-                        screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-                        WIDTH, HEIGHT = screen.get_size() # 너비 높이도 다시 설정해주고,
-                    else: # 창화면인 경우
-                        screen = pygame.display.set_mode((1200, 800))  # 1200 x  800 창모드
-                        WIDTH, HEIGHT = 1200, 800 
-                    
-
-        # 마우스 위치 업데이트
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        print(mouse_x,mouse_y)
-        
-        screen.fill(WHITE)
-        
-        
-        # 화면 업데이트
-        pygame.display.flip()
-        clock.tick(60)  # 60 FPS
+    """
+    메인 함수 - 게임의 시작점
+    """
+    print("🚀 pygame 초기화 완료!")
+    print(f"📐 화면 크기: {WIDTH} x {HEIGHT}")
+    print("🎮 게임을 시작합니다...")
+    print("📋 조작법:")
+    print("   - ESC 키: 게임 종료")
+    print("   - 창 닫기: 게임 종료")
     
-    pygame.quit()
-    sys.exit()
+    # 게임 시계 생성 (프레임 레이트 조절용)
+    clock = pygame.time.Clock()
+    
+    # 게임 실행 여부를 나타내는 변수
+    running = True
+    
+    # 🎮 메인 게임 루프
+    # 게임이 실행되는 동안 계속 반복되는 부분
+    while running:
+        # ========================================
+        # 📥 이벤트 처리 (사용자 입력 받기)
+        # ========================================
+        
+        # pygame.event.get()은 사용자의 입력을 받아오는 함수입니다
+        for event in pygame.event.get():
+            # 창 닫기 버튼을 눌렀을 때
+            if event.type == pygame.QUIT:
+                running = False  # 게임 루프 종료
+                
+            # 키보드 키를 눌렀을 때
+            elif event.type == pygame.KEYDOWN:
+                # ESC 키를 눌렀을 때
+                if event.key == pygame.K_ESCAPE:
+                    running = False  # 게임 루프 종료
+        
+        # ========================================
+        # 🎨 화면 그리기
+        # ========================================
+        
+        # 화면을 검은색으로 지우기
+        # surface.fill()은 화면을 특정 색상으로 채우는 함수입니다
+        screen.fill(BLACK)
+        
+        # 여기에 나중에 파티클들을 그릴 예정입니다!
+        # 지금은 빈 검은 화면만 보입니다.
+        
+        # ========================================
+        # 📺 화면 업데이트
+        # ========================================
+        
+        # 화면에 그린 내용을 실제로 표시하기
+        # pygame.display.flip()은 더블 버퍼링을 위한 함수입니다
+        pygame.display.flip()
+        
+        # 프레임 레이트 제한 (60 FPS)
+        # clock.tick()은 초당 프레임 수를 제한하는 함수입니다
+        clock.tick(60)
+    
+    # ========================================
+    # 👋 게임 종료
+    # ========================================
+    
+    print("👋 게임을 종료합니다.")
+    pygame.quit()  # pygame 종료
+    sys.exit()     # 프로그램 종료
 
+# ========================================
+# 🎯 실습 과제
+# ========================================
+
+"""
+🧪 실습 과제 1: 화면 크기 바꿔보기
+WIDTH와 HEIGHT 값을 바꿔보세요:
+- WIDTH = 800, HEIGHT = 600 (더 작은 화면)
+- WIDTH = 1920, HEIGHT = 1080 (더 큰 화면)
+
+🧪 실습 과제 2: 배경색 바꿔보기
+screen.fill(BLACK) 부분을 다른 색상으로 바꿔보세요:
+- screen.fill(RED) (빨간 배경)
+- screen.fill(GREEN) (초록 배경)
+- screen.fill(BLUE) (파란 배경)
+
+🧪 실습 과제 3: 새로운 색상 만들어보기
+파일 상단에 새로운 색상을 정의해보세요:
+- PURPLE = (128, 0, 128) (보라색)
+- ORANGE = (255, 165, 0) (주황색)
+- PINK = (255, 192, 203) (분홍색)
+
+🧪 실습 과제 4: 창 제목 바꿔보기
+pygame.display.set_caption() 부분을 바꿔보세요:
+- "내가 만든 게임!"
+- "파티클 시스템 실습"
+
+🎯 도전 과제:
+1. 키보드로 배경색을 바꿀 수 있도록 만들어보기
+2. 마우스 클릭으로 색상을 바꿀 수 있도록 만들어보기
+3. 시간에 따라 배경색이 변하도록 만들어보기
+"""
+
+# 프로그램 시작
 if __name__ == "__main__":
     main()
