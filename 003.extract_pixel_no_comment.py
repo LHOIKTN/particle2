@@ -73,39 +73,35 @@ def load_and_resize_image(image_path, screen_width, screen_height):
 
 # 전체 파티클 시스템을 관리하는 클래스
 # 이미지에서 파티클을 생성(픽셀 추출), 모든 파티클을 업데이트
-
 class Effect:
-    #  초기화 메서드
-    #  Effect 클래스를 사용하여 새로운 인스턴스(객체)를 생성할 때 실행되는 메서드
     def __init__(self, width, height, image_path):
         """Effect 클래스 생성시 최초에 정의할 속성들"""
 
-        # 화면설정
-        self.width = width   # 화면 너비
-        self.height = height # 화면 높이
+        self.width = width   
+        self.height = height 
 
-        # 파티클 시스템 설정
-        self.particles = []  # 이미지 분해해서 얻은 파티클을 담을 리스트
-        self.gap = 20 # 픽셀 추출 간격
+
+        self.particles = []  
+        self.gap = 20 
         
-        """속성을 모두 정의하면 그 다음에 이미지를 파티클로 분해"""
-        self.load_image_particles(image_path) # Effect 인스턴스를 생성했을 때 실행되는 메서드
+        self.load_image_particles(image_path) 
     
     
     def load_image_particles(self, image_path):
         """이미지에서 파티클 생성"""
 
-        # 이미지 불러오기 & 사이즈 조정
+        
         image = load_and_resize_image(image_path,self.width,self.height)
 
-        # 이미지 사이즈 추출하기
+        
         img_width, img_heigth = image.get_size() 
 
-        # 이미지가 화면을 완전히 덮도록 중앙 정렬 
+
+
         image_offset_x = (self.width - img_width)//2
         image_offset_y = (self.height - img_heigth)//2 
 
-        # 🤓 픽셀 추출
+       
         array = pygame.surfarray.array3d(image)
         print(f"이미지의 픽셀 배열: {array}")
         print(f"이미지의 픽셀 배열의 구성 (x, y, color): {array.shape}")
@@ -116,13 +112,12 @@ class Effect:
         for y in range(0, array.shape[1], self.gap):  
             for x in range(0, array.shape[0], self.gap):
                 
-                # 화면 내 좌표로 변환
+                
                 image_x = x + image_offset_x
                 image_y = y + image_offset_y
 
-                # 화면 범위 내에 있는 픽섹만 파티클로 생성
+                
                 if 0<= image_x < self.width and 0<= image_y < self.height:
-                    # 픽셀의 r, g, b 값 추출
                     r,g,b = array[x,y]
                     color = (r,g,b)
                     particle = (x,y,color)
